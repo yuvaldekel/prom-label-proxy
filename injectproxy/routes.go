@@ -465,7 +465,7 @@ func NewRoutes(upstream *url.URL, label string, extractLabeler ExtractLabeler, o
 				originalPath = "/" + originalPath
 			}
 
-			pr.Out.URL.Path = opts.upstreamPrefixPath + originalPath
+			pr.Out.URL.Path = opt.upstreamPrefixPath + originalPath
 		}
 	}
 
