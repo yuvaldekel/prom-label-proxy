@@ -60,7 +60,7 @@ type routes struct {
 }
 
 type options struct {
-	upstreamPrefixPath       string
+	upstreamPathPrefix       string
 	upstreamCaCert           string
 	enableLabelAPIs          bool
 	passthroughPaths         []string
@@ -90,10 +90,10 @@ func WithPrometheusRegistry(reg prometheus.Registerer) Option {
 	})
 }
 
-// WithUpstreamPrefixPath configures the proxy to use the custom prefix path for the upstream.
-func WithUpstreamPrefixPath(prefixPath string) Option {
+// WithUpstreamPathPrefix configures the proxy to use the custom path prefix for the upstream.
+func WithUpstreamPathPrefix(pathPrefix string) Option {
 	return optionFunc(func(o *options) {
-		o.upstreamPrefixPath = prefixPath
+		o.upstreamPathPrefix = pathPrefix
 	})
 }
 
@@ -453,8 +453,8 @@ func NewRoutes(upstream *url.URL, label string, extractLabeler ExtractLabeler, o
 		r.modifiers["/api/v1/rules"] = modifyAPIResponse(r.filterRules)
 	}
 
-	// Configure prefix path for proxy
-	if opt.upstreamPrefixPath != "" {
+	// Configure path prefix for proxy
+	if opt.upstreamPathPrefix != "" {
 		originalRewrite := proxy.Rewrite
 
 		proxy.Rewrite = func(pr *httputil.ProxyRequest) {
@@ -465,7 +465,7 @@ func NewRoutes(upstream *url.URL, label string, extractLabeler ExtractLabeler, o
 				originalPath = "/" + originalPath
 			}
 
-			pr.Out.URL.Path = opt.upstreamPrefixPath + originalPath
+			pr.Out.URL.Path = opt.upstreamPathPrefix + originalPath
 		}
 	}
 
