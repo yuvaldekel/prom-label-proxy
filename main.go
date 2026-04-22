@@ -138,7 +138,7 @@ func main() {
 	if upstreamPathPrefix != "" {
 		opts = append(opts, injectproxy.WithUpstreamPathPrefix(upstreamPathPrefix))
 	}
-	
+
 	if upstreamCaCert != "" {
 		opts = append(opts, injectproxy.WithUpstreamCaCert(upstreamCaCert))
 	}
