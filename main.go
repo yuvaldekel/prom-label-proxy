@@ -136,7 +136,7 @@ func main() {
 
 	opts := []injectproxy.Option{injectproxy.WithPrometheusRegistry(reg)}
 	if upstreamPathPrefix != "" {
-		opts = append(opts, injectproxy.WithUpstreamPrefixPath(upstreamPathPrefix))
+		opts = append(opts, injectproxy.WithUpstreamPathPrefix(upstreamPathPrefix))
 	}
 	
 	if upstreamCaCert != "" {
