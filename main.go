@@ -74,6 +74,8 @@ func main() {
 		labelMatchersForRulesAPI        bool
 		promQLDurationExpressionParsing bool
 		promQLExperimentalFunctions     bool
+		promQLExtendedRangeSelectors    bool
+		promQLBinopFillModifiers        bool
 	)
 
 	flagset := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
@@ -99,6 +101,8 @@ func main() {
 	flagset.BoolVar(&labelMatchersForRulesAPI, "enable-label-matchers-for-rules-api", false, "When true, the proxy uses label matchers when querying the /api/v1/rules endpoint. NOTE: Enable with care because filtering by label matcher is not implemented in older versions of Prometheus (>= 2.54.0 required) and Thanos (>= v0.25.0 required). If not implemented by upstream, the response will not be filtered accordingly.")
 	flagset.BoolVar(&promQLDurationExpressionParsing, "enable-promql-duration-expression-parsing", false, "When true, the proxy supports arithmetic for durations in PromQL expressions.")
 	flagset.BoolVar(&promQLExperimentalFunctions, "enable-promql-experimental-functions", false, "When true, the proxy supports experimental functions in PromQL expressions.")
+	flagset.BoolVar(&promQLExtendedRangeSelectors, "enable-promql-extended-range-selectors", false, "When true, the proxy supports extended range selectors in PromQL expressions.")
+	flagset.BoolVar(&promQLBinopFillModifiers, "enable-promql-binop-fill-modifiers", false, "When true, the proxy supports binary operation fill modifiers in PromQL expressions.")
 
 	promslogConfig := &promslog.Config{
 		Level:  promslog.NewLevel(),
@@ -208,6 +212,14 @@ func main() {
 
 	if promQLExperimentalFunctions {
 		opts = append(opts, injectproxy.WithPromqlExperimentalFunctions())
+	}
+
+	if promQLExtendedRangeSelectors {
+		opts = append(opts, injectproxy.WithPromqlExtendedRangeSelectors())
+	}
+
+	if promQLBinopFillModifiers {
+		opts = append(opts, injectproxy.WithPromqlBinopFillModifiers())
 	}
 
 	var extractLabeler injectproxy.ExtractLabeler
